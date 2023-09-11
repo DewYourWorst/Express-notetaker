@@ -1,30 +1,30 @@
 const fs = require("fs")
 const generateUniqueId = require("generate-unique-id");
 
-const updateNote = (updatedNotesField) => {
+const editNote = (updatedNotesField) => {
     fs.writeFile("./db/db.json", JSON.stringify(updatedNotesField), (err) => {
         if (err) throw (err);
     });
 };
 
 module.exports = (app) => {
-    app.get("/api/notes", (req, res) => {
+    app.get("/api/notes.html", (req, res) => {
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
             res.json(JSON.parse(data))
         });
     });
 
-    app.post("/api/notes", (req, res) => {
+    app.post("/api/notes.html", (req, res) => {
         const newNote = req.body;
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
-            const notes = JSON.parse(data);
+            const notesArr = JSON.parse(data);
             newNote.id = generateUniqueId({length: 10});
-            notes.push(newNote);
+            notesArr.push(newNote);
 
 
-            updateNote(notes);
+            editNote(notesArr);
 
             console.log(
                 `A Note has been Added!
@@ -33,45 +33,45 @@ module.exports = (app) => {
                   And the ID: ${newNote.id}`
                   );
 
-            res.send(notes)
+            res.send(notesArr)
         });
     });
 
-    app.delete("/api/notes/:id", (req, res) => {
+    app.delete("/api/notes.html/:id", (req, res) => {
         const deleteId = req.params.id;
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
-            let notes = JSON.parse(data);
+            let notesArr = JSON.parse(data);
             for (let i = 0; i < notes.length; i++) {
-                if (notes[i].id === deleteId) {
-                    notes.splice(i, 1);
+                if (notesArr[i].id === deleteId) {
+                    notesArr.splice(i, 1);
                 }
             }
-            updateNote(notes);
+            editNote(notesArr);
             console.log(`The Note ${deleteId} has been deleted!`);
-            res.send(notes)
+            res.send(notesArr)
         });
     });
 
-    app.put("/api/notes/:id", (req, res) => {
+    app.put("/api/notes.html/:id", (req, res) => {
         const editId = req.params.id;
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
-            let notes = JSON.parse(data);
-            let selectNote = notes.find((note) => note.id === editId);
+            let notesArr = JSON.parse(data);
+            let selectedNote = notesArr.find((note) => note.id === editId);
 
-            if(selectNote) {
+            if(selectedNote) {
                 let updatedNote = {
                     title: req.body.title,
                     text: req.body.text,
                     id: selectNote.id,
                 };
-                let targetIndex = notes.indexOf(selectNote);
-                notes.splice(targetIndex, 1, updatedNote);
+                let targetIndex = notes.indexOf(selectedNote);
+                notesArr.splice(targetIndex, 1, updatedNote);
 
                 res.sendStatus(204)
-                updateNote(notes)
-                res.json(notes)
+                updateNote(notesArr)
+                res.json(notesArr)
             } else {
                 res.sendStatus(404);
             }

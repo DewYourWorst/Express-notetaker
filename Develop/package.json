@@ -9,6 +9,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "generate-unique-id": "^2.0.3",
+    "nodemon": "^3.0.1"
   }
 }
