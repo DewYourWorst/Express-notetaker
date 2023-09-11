@@ -1,13 +1,13 @@
 const fs = require("fs")
 const generateUniqueId = require("generate-unique-id");
-
+const app = require("express").Router()
 const editNote = (updatedNotesField) => {
     fs.writeFile("./db/db.json", JSON.stringify(updatedNotesField), (err) => {
         if (err) throw (err);
     });
 };
 
-module.exports = (app) => {
+//module.exports = (app) => {
     app.get("/api/notes", (req, res) => {
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
@@ -29,7 +29,7 @@ module.exports = (app) => {
             console.log(
                 `A Note has been Added!
                   Here is the Title: ${JSON.stringify(newNote.title)},
-                  Here is the Text: ${JSON.stringify(newNote.test)}, 
+                  Here is the Text: ${JSON.stringify(newNote.text)}, 
                   And the ID: ${newNote.id}`
                   );
 
@@ -37,21 +37,6 @@ module.exports = (app) => {
         });
     });
 
-    app.delete("/api/notes/:id", (req, res) => {
-        const deleteId = req.params.id;
-        fs.readFile("./db/db.json", "utf8", (err, data) => {
-            if (err) throw err;
-            let notesArr = JSON.parse(data);
-            for (let i = 0; i < notes.length; i++) {
-                if (notesArr[i].id === deleteId) {
-                    notesArr.splice(i, 1);
-                }
-            }
-            editNote(notesArr);
-            console.log(`The Note ${deleteId} has been deleted!`);
-            res.send(notesArr)
-        });
-    });
 
     app.put("/api/notes/:id", (req, res) => {
         const editId = req.params.id;
@@ -77,4 +62,5 @@ module.exports = (app) => {
             }
         })
     })
-}
+//}
+module.exports = app
