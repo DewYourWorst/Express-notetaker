@@ -50,6 +50,14 @@ const deleteNote = (id) =>
     },
   });
 
+  const editNote = (id) =>
+  fetch(`/api/notes/${id}`, {
+    method:"PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
 const renderActiveNote = () => {
   hide(saveNoteBtn);
 

@@ -8,14 +8,14 @@ const editNote = (updatedNotesField) => {
 };
 
 module.exports = (app) => {
-    app.get("/api/notes.html", (req, res) => {
+    app.get("/api/notes", (req, res) => {
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
             res.json(JSON.parse(data))
         });
     });
 
-    app.post("/api/notes.html", (req, res) => {
+    app.post("/api/notes", (req, res) => {
         const newNote = req.body;
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
@@ -37,7 +37,7 @@ module.exports = (app) => {
         });
     });
 
-    app.delete("/api/notes.html/:id", (req, res) => {
+    app.delete("/api/notes/:id", (req, res) => {
         const deleteId = req.params.id;
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
@@ -53,7 +53,7 @@ module.exports = (app) => {
         });
     });
 
-    app.put("/api/notes.html/:id", (req, res) => {
+    app.put("/api/notes/:id", (req, res) => {
         const editId = req.params.id;
         fs.readFile("./db/db.json", "utf8", (err, data) => {
             if (err) throw err;
